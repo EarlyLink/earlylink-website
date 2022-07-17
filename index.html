@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/now-ui-kit.css">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,600,700,800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="./logo.jpg"></head>
+    <title>Earlylink</title>
+</head>
+<body>
+    <div id="app">
+        <nav class="navbar navbar-expand-lg bg-transparent">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="https://discordapp.com/oauth2/authorize?client_id=579653463290675221&scope=bot&permissions=2146958847" target="_blank">Add Discord Bot</a>
+                    </li>
+                        <li class="nav-item">
+                        <a class="nav-link" href="https://Twitter.com/Earlylinksol" target="_blank">Follow Twitter</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="heading text-center">
+            <h1 class="display-5 title">Earlylink</h1>
+            <p class="subtitle">Earlylink allows you to stay informed in real time of the newest interesting Solana projects. Its voting system and efficient notifications will add an important value to your DAO Discord server! Don't wait longer and start using Earlylink right now.</p>
+            <a class="btn btn-primary btn-lg" href="https://discordapp.com/oauth2/authorize?client_id=579653463290675221&scope=bot&permissions=2146958847" role="button" target="_blank">Add bot to Discord</a>
+            <a class="btn btn-secondary btn-lg" href="https://twitter.com/Earlylinksol" role="button" target="_blank">Follow on Twitter</a>
+            <br /><br /><br /><br /><br /><br />
+        </div>
+        <div class="features">
+            <div class="title">TOP PROJECTS</div>
+            <div class="subtitle">These projects are the most upvoted ones! ⬆️</div>
+            <div class="cards">
+                <div class="card" style="width: 18rem;" v-for="(project, index) in projects">
+                    <img :src="project.projectImageUrl" class="card-img-top" height="120">
+                    <div class="card-body">
+                        <h5 class="card-title">{{project.projectName}}</h5>
+                        <p class="card-text">{{project.projectDescription}}</p>
+                        <a href="javascript:void(0)" @click="showInfoAbout(index)" class="btn btn-primary">read more</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="statistics">
+            <div class="cards">
+                <div class="card statistic" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Discord Servers</h5>
+                        <h1 style="font-weight: bold !important">+ {{serverCount.toLocaleString('en-US')}}</h1>
+                    </div>
+                </div>
+                <div class="card statistic" style="width: 18rem;">
+                    <div class="card-body">
+                        <h5 class="card-title">Twitter Followers</h5>
+                        <h1 style="font-weight: bold !important">+ {{userCount.toLocaleString('en-US')}}</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="start">
+            <div class="card">
+                <div class="card-body">
+                    <br />
+                    <a class="btn btn-primary btn-lg" href="https://discordapp.com/oauth2/authorize?client_id=579653463290675221&scope=bot&permissions=2146958847" target="_blank" role="button">Add Discord Bot</a>
+                </div><br />
+            </div>
+        </div>
+        <div class="footer">
+            Paladium'Bot | Made by <a href="https://github.com/Androz2091" target="_blank">Androz2091</a> | Not affiliated with Paladium-pvp.fr
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="js/now-ui-kit.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script src="https://unpkg.com/vue@3"></script>
+<script type="text/javascript">
+    const { createApp } = Vue
+
+    createApp({
+        data() {
+            return {
+                serverCount: 4000,
+                userCount: 120000,
+
+                projects: []
+            }
+        },
+        methods: {
+            showInfoAbout: function (idx) {
+                const project = this.projects[idx];
+                Swal.fire({
+                    title: project.projectName + ' (' + project.projectValue + ' ⬆️)',
+                    html: project.projectDescription,
+                    imageUrl: project.projectImageUrl,
+                    imageAlt: 'Twitter Screenshot'
+                });
+            }
+        },
+        beforeCreate: async function () {
+            const responseVotes = await fetch('https://api.earlylink.io/votes')
+            const dataVotes = await responseVotes.json()
+            this.projects = dataVotes;
+            
+            const responseStats = await fetch('https://api.earlylink.io/stats')
+            const dataStats = await responseStats.json()
+            this.serverCount = dataStats.serverCount;
+            this.userCount = dataStats.userCount;
+        },
+    }).mount('#app')
+</script>
+</body>
+</html>
