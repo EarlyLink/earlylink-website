@@ -46,7 +46,7 @@
                     <img :src="project.projectImageUrl" class="card-img-top" height="120">
                     <div class="card-body">
                         <h5 class="card-title">{{project.projectName}}</h5>
-                        <p class="card-text">{{project.projectDescription}}</p>
+                        <p class="card-text">{{project.projectDescription.slice(0, 50) + '...'}}</p>
                         <a href="javascript:void(0)" @click="showInfoAbout(index)" class="btn btn-primary">read more</a>
                     </div>
                 </div>
